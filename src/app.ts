@@ -32,7 +32,7 @@ build()
   .then((server) =>
     server.listen(3030, (err, address) => {
       if (err) {
-        logger.debug(err);
+        logger.debug(err)
         process.exit(1)
       }
       logger.debug(`Server listening at ${address}`);
