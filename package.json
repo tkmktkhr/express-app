@@ -7,10 +7,10 @@
     "build": "tsc -p  tsconfig.json",
     "start": "node ./dist/app.js ",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "husky": "husky install",
     "format": "prettier --write ./src/app.ts",
     "eslint": "eslint --fix ./src/app.ts",
-    "fix": "npm run format && npm run eslint"
+    "fix": "npm run format && npm run eslint",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -44,17 +44,12 @@
     "ts-node": "^10.0.0",
     "typescript": "^4.3.2"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
+  "type": "module",
   "lint-staged": {
     "*.ts": [
       "prettier --write",
       "eslint --cache --fix",
       "bash -c tsc --noEmit"
     ]
-  },
-  "type": "module"
+  }
 }
