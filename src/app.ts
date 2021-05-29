@@ -33,8 +33,6 @@ build()
     server.listen(3030, (err, address) => {
       if (err) {
         logger.debug(err);
-        /*global process*/
-        /*eslint no-undef: "error"*/
         process.exit(1);
       }
       logger.debug(`Server listening at ${address}`);
