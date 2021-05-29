@@ -7,6 +7,7 @@
     "build": "tsc -p  tsconfig.json",
     "start": "node ./dist/app.js ",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "husky": "husky install",
     "format": "prettier --write ./src/app.ts",
     "eslint": "eslint --fix ./src/app.ts",
     "fix": "npm run format && npm run eslint"
