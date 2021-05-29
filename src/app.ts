@@ -33,8 +33,6 @@ build()
     server.listen(3030, (err, address) => {
       if (err) {
         logger.debug(err);
-        console.log('test');
-
         process.exit(1);
       }
       logger.debug(`Server listening at ${address}`);
