@@ -1,6 +1,6 @@
 import fastify from 'fastify';
 import fastifyExpress from 'fastify-express';
-import { router } from './infrastructures/routers/index';
+import { router } from '@/infrastructures/routers';
 import log4js from 'log4js';
 
 const logger = log4js.getLogger();
