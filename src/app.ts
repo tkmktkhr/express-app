@@ -9,12 +9,12 @@ logger.debug('Some debug messages');
 
 const server = fastify();
 
-async function build() {
-  await server.register(fastifyExpress).after(() => {
+const build = async () => {
+  server.register(fastifyExpress).after(() => {
     server.use(router);
   });
   return server;
-}
+};
 
 build()
   .then((server) =>
