@@ -31,6 +31,7 @@
     "express": "^4.17.1",
     "fastify": "^3.17.0",
     "fastify-express": "^0.3.2",
+    "googleapis": "^74.2.0",
     "log4js": "^6.3.0",
     "tsconfig-paths": "^3.9.0"
   },

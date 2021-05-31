@@ -4,7 +4,7 @@ import { router } from '@/infrastructures/routers';
 import log4js from 'log4js';
 import cors from 'cors';
 
-const logger = log4js.getLogger();
+export const logger = log4js.getLogger();
 logger.level = 'debug';
 logger.debug('Some debug messages');
 
