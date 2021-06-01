@@ -1,12 +1,10 @@
 import { google } from 'googleapis';
 import { logger } from '@/app';
 
-const people = google.people('v1');
-
 const option = {
   clientId: '',
   clientSecret: '',
-  redirectUri: 'http://localhost:8080',
+  redirectUri: '',
 };
 
 /**
@@ -52,16 +50,31 @@ google.options({ auth: oauth2Client });
 //   });
 // }
 
-export const runSample = async () => {
+const people = google.people({
+  version: 'v1',
+  auth: oauth2Client,
+});
+
+export const runSample = async (code: string) => {
   // retrieve user profile
   //   const { tokens } = await oauth2Client.getToken(qs.get('code'));
   //   oauth2Client.credentials = tokens; // eslint-disable-line require-atomic-updates
-  const res = await people.people.get({
-    resourceName: 'people/me',
-    personFields: 'emailAddresses',
-  });
-  logger.debug(res.data);
-  return res.data;
+  const { tokens } = await oauth2Client.getToken(code);
+  oauth2Client.setCredentials(tokens);
+  logger.debug('people.people.get');
+
+  const res = await people.people
+    .get({
+      resourceName: 'people/me',
+      personFields: 'emailAddresses,names',
+    })
+    .catch((e) => logger.debug(e));
+  logger.debug(res?.data);
+  logger.debug(res?.data.resourceName);
+  logger.debug(res?.data.etag);
+  logger.debug(res?.data.emailAddresses);
+  logger.debug(res?.data.names);
+  return res;
 };
 
 const scopes = [
