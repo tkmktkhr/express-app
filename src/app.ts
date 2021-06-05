@@ -1,5 +1,6 @@
 import fastify from 'fastify';
 import fastifyExpress from 'fastify-express';
+import bodyParser from 'body-parser';
 import { router } from '@/infrastructures/routers';
 import log4js from 'log4js';
 import cors from 'cors';
@@ -18,6 +19,7 @@ const build = async () => {
   server.register(fastifyExpress).after(() => {
     // CORS setting must written before router.
     server.use(cors(corsOptions));
+    server.use(bodyParser());
     server.use(router);
   });
   return server;

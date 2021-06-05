@@ -2,6 +2,8 @@ import { google } from 'googleapis';
 import { logger } from '@/app';
 
 const option = {
+  // When putting the values, Do not comment out console.log in order to protect secret info.
+  // console.log('DELETE ENV!!')
   clientId: '',
   clientSecret: '',
   redirectUri: '',
