@@ -1,6 +1,6 @@
 import express from 'express';
 import { getAuthorizeUrl } from '@/infrastructures/apis/googleApis';
-import { runSample } from '@/infrastructures/apis/googleApis/index';
+import { getPeopleSrc } from '@/infrastructures/apis/googleApis';
 import { logger } from '@/app';
 
 export const router = express.Router();
@@ -21,6 +21,7 @@ router.post('/post', async (req, res) => {
 
 router.get('/getAuthorizeUrl', async (req, res) => {
   logger.debug('called getAuthorizeUrl');
+  logger.debug(req.query);
   const url = await getAuthorizeUrl();
   res.send({ url });
 });
@@ -28,7 +29,10 @@ router.get('/getAuthorizeUrl', async (req, res) => {
 router.get('/userInfo', async (req, res) => {
   logger.debug('called userInfo');
   const code = req.query.code as string;
+  logger.debug(req.query);
+  if (!code) res.send({ data: null });
 
-  const data = await runSample(code);
+  const data = await getPeopleSrc(code);
+  logger.debug(data);
   res.send({ data });
 });

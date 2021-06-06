@@ -1,9 +1,9 @@
 import { google } from 'googleapis';
 import { logger } from '@/app';
 
+// When putting the values, Do not comment out console.log in order to protect secret info.
+// console.log('DELETE ENV!!');
 const option = {
-  // When putting the values, Do not comment out console.log in order to protect secret info.
-  // console.log('DELETE ENV!!')
   clientId: '',
   clientSecret: '',
   redirectUri: '',
@@ -25,7 +25,7 @@ google.options({ auth: oauth2Client });
 // async function authenticate(scopes: string[]) {
 //   return new Promise((resolve, reject) => {
 //     // grab the url that will be used for authorization
-//     const authorizeUrl = oauth2Client.generateAuthUrl({
+//     const authUrl = oauth2Client.generateAuthUrl({
 //       access_type: 'offline',
 //       scope: scopes.join(' '),
 //     });
@@ -46,7 +46,7 @@ google.options({ auth: oauth2Client });
 //       })
 //       .listen(3000, () => {
 //         // open the browser to the authorize url to start the workflow
-//         opn(authorizeUrl, { wait: false }).then((cp) => cp.unref());
+//         opn(authUrl, { wait: false }).then((cp) => cp.unref());
 //       });
 //     destroyer(server);
 //   });
@@ -57,26 +57,21 @@ const people = google.people({
   auth: oauth2Client,
 });
 
-export const runSample = async (code: string) => {
+const getPeopleParams = {
+  resourceName: 'people/me',
+  personFields: 'emailAddresses,names',
+};
+
+export const getPeopleSrc = async (code: string) => {
   // retrieve user profile
   //   const { tokens } = await oauth2Client.getToken(qs.get('code'));
   //   oauth2Client.credentials = tokens; // eslint-disable-line require-atomic-updates
   const { tokens } = await oauth2Client.getToken(code);
+  logger.debug({ tokens });
   oauth2Client.setCredentials(tokens);
-  logger.debug('people.people.get');
 
-  const res = await people.people
-    .get({
-      resourceName: 'people/me',
-      personFields: 'emailAddresses,names',
-    })
-    .catch((e) => logger.debug(e));
-  logger.debug(res?.data);
-  logger.debug(res?.data.resourceName);
-  logger.debug(res?.data.etag);
-  logger.debug(res?.data.emailAddresses);
-  logger.debug(res?.data.names);
-  return res;
+  const res = await people.people.get(getPeopleParams).catch((e) => logger.debug(e));
+  return res?.data;
 };
 
 const scopes = [
@@ -85,17 +80,14 @@ const scopes = [
   'profile',
 ];
 // authenticate(scopes)
-//   .then((client) => runSample(client))
+//   .then((client) => getPeopleSrc(client))
 //   .catch(logger.error);
 
+const optionsForAuthURl = {
+  access_type: 'offline',
+  scope: scopes.join(' '),
+};
+
 export const getAuthorizeUrl = async () => {
-  // grab the url that will be used for authorization
-  const authorizeUrl = oauth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: scopes.join(' '),
-  });
-
-  logger.debug(authorizeUrl);
-
-  return authorizeUrl;
+  return oauth2Client.generateAuthUrl(optionsForAuthURl);
 };
