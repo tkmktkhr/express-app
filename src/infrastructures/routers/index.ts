@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAuthorizeUrl } from '@/infrastructures/apis/googleApis';
+import { getAuthorizeUrl, setAccessToken } from '@/infrastructures/apis/googleApis';
 import { getPeopleSrc } from '@/infrastructures/apis/googleApis';
 import { logger } from '@/app';
 
@@ -7,32 +7,35 @@ export const router = express.Router();
 
 router.get('/ping', async (req, res) => {
   logger.debug('called ping');
-  const pong = 'pong';
+  const pong = 'get pong';
   res.send({ pong });
 });
 
 router.post('/post', async (req, res) => {
-  logger.debug('called post-----------------------------------------');
-  logger.debug(req.body);
-
-  const pong = 'post';
-  res.send({ pong });
+  res.send({ pong: 'post pong' });
 });
 
 router.get('/getAuthorizeUrl', async (req, res) => {
   logger.debug('called getAuthorizeUrl');
   logger.debug(req.query);
   const url = await getAuthorizeUrl();
+  logger.debug(url);
   res.send({ url });
+});
+
+router.post('/setAccessToken', async (req, res) => {
+  logger.debug('called setAccessToken');
+  const code = req.body.data.code as string;
+  if (!code) res.send({ data: null });
+  logger.debug(code);
+  await setAccessToken(code);
+  res.send({ data: [] });
 });
 
 router.get('/userInfo', async (req, res) => {
   logger.debug('called userInfo');
-  const code = req.query.code as string;
-  logger.debug(req.query);
-  if (!code) res.send({ data: null });
 
-  const data = await getPeopleSrc(code);
+  const data = await getPeopleSrc();
   logger.debug(data);
   res.send({ data });
 });

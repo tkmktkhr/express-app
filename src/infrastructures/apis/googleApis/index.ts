@@ -19,6 +19,63 @@ const oauth2Client = new google.auth.OAuth2(option);
  */
 google.options({ auth: oauth2Client });
 
+// ------AUTHORIZATION API
+const scopes = [
+  'https://www.googleapis.com/auth/contacts.readonly',
+  'https://www.googleapis.com/auth/user.emails.read',
+  'profile',
+];
+// authenticate(scopes)
+//   .then((client) => getPeopleSrc(client))
+//   .catch(logger.error);
+
+const optionsForAuthURl = {
+  access_type: 'offline',
+  scope: scopes.join(' '),
+};
+
+export const getAuthorizeUrl = async () => {
+  return oauth2Client.generateAuthUrl(optionsForAuthURl);
+};
+
+// ------SET FIRST TOKEN
+export const setAccessToken = async (code: string) => {
+  const { tokens } = await oauth2Client.getToken(code);
+  logger.debug({ tokens });
+  logger.debug(oauth2Client);
+  logger.debug('BEFORE oauth2Client');
+  oauth2Client.setCredentials(tokens);
+  logger.debug('----------------------------');
+  logger.debug('AFTER oauth2Client');
+  logger.debug(oauth2Client);
+  return;
+};
+
+// ------PEOPLE API
+const people = google.people({
+  version: 'v1',
+  auth: oauth2Client,
+});
+
+const getPeopleParams = {
+  resourceName: 'people/me',
+  personFields: 'emailAddresses,names',
+};
+
+export const getPeopleSrc = async () => {
+  //   const { tokens } = await oauth2Client.getToken(code);
+  //   logger.debug({ tokens });
+  //   oauth2Client.setCredentials(tokens);
+  logger.debug('BEFORE GETTING PEOPLE INFO oauth2Client');
+  logger.debug(oauth2Client);
+  const res = await people.people.get(getPeopleParams).catch((e) => logger.error(e));
+  logger.debug(res);
+  logger.debug('----------------------------');
+  logger.debug('AFTER GETTING PEOPLE INFO oauth2Client');
+  logger.debug(oauth2Client);
+  return res?.data;
+};
+
 /**
  * Open an http server to accept the oauth callback. In this simple example, the only request to our webserver is to /callback?code=<code>
  */
@@ -51,43 +108,3 @@ google.options({ auth: oauth2Client });
 //     destroyer(server);
 //   });
 // }
-
-const people = google.people({
-  version: 'v1',
-  auth: oauth2Client,
-});
-
-const getPeopleParams = {
-  resourceName: 'people/me',
-  personFields: 'emailAddresses,names',
-};
-
-export const getPeopleSrc = async (code: string) => {
-  // retrieve user profile
-  //   const { tokens } = await oauth2Client.getToken(qs.get('code'));
-  //   oauth2Client.credentials = tokens; // eslint-disable-line require-atomic-updates
-  const { tokens } = await oauth2Client.getToken(code);
-  logger.debug({ tokens });
-  oauth2Client.setCredentials(tokens);
-
-  const res = await people.people.get(getPeopleParams).catch((e) => logger.debug(e));
-  return res?.data;
-};
-
-const scopes = [
-  'https://www.googleapis.com/auth/contacts.readonly',
-  'https://www.googleapis.com/auth/user.emails.read',
-  'profile',
-];
-// authenticate(scopes)
-//   .then((client) => getPeopleSrc(client))
-//   .catch(logger.error);
-
-const optionsForAuthURl = {
-  access_type: 'offline',
-  scope: scopes.join(' '),
-};
-
-export const getAuthorizeUrl = async () => {
-  return oauth2Client.generateAuthUrl(optionsForAuthURl);
-};
