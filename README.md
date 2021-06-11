@@ -1,10 +1,18 @@
 ### Docker Container
 
 Build image for dev mode
+
 `docker image build --no-cache --build-arg ENVIRONMENT=dev -t <name:tag> .`
 
 Start container
+
 `docker container run -p <local-port>:3030 <image:tag>`
+
+### Docker Compose
+
+See docker-compose.yml
+
+`docker-compose up --build api`
 
 ### husky
 
