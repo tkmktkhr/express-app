@@ -27,7 +27,7 @@ const build = async () => {
 
 build()
   .then((server) =>
-    server.listen(3030, (err, address) => {
+    server.listen(3030, '0.0.0.0', (err, address) => {
       if (err) {
         logger.debug(err);
         /*global process*/

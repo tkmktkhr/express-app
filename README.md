@@ -1,7 +1,10 @@
 ### Create Docker image
 
 image for dev mode
-`docker image build --no-cache --build-arg ENVIRONMENT=dev -t <name> .`
+`docker image build --no-cache --build-arg ENVIRONMENT=dev -t <name:tag> .`
+
+start
+`docker container run -p <local-port>:3030 <image:tag>`
 
 ### husky
 
