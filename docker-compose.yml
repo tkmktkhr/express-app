@@ -5,5 +5,7 @@ services:
       context: .
     command: sh -c "npm run dev"
     tty: true
+    volumes:
+      - ./src:/src/:cached
     ports:
       - '3001:3030'
