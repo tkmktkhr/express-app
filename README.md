@@ -10,13 +10,13 @@ Start container
 
 ### Docker Compose
 
-See docker-compose.yml
+See `docker-compose.yml`
 
 `docker-compose up --build api`
 
 ### husky
 
-TODO write the bellow in package.json and make it work.
+TODO write the bellow in `package.json` and make it work.
 
 ```
   "husky": {
