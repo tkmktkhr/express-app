@@ -1,4 +1,3 @@
-// import express from 'express';
 // import { getAuthorizeUrl, setAccessToken } from '@/infrastructures/apis/googleApis';
 // import { getPeopleSrc } from '@/infrastructures/apis/googleApis';
 import { logger } from '@/app';
