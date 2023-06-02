@@ -82,33 +82,3 @@ export const errorHandler = (err: Error | Array<Error>, _: FastifyRequest, rep: 
   rep.status(500).send({ err: 'Internal Server Error' });
   return;
 };
-
-// const server = fastify();
-
-// const corsOptions = {
-//   origin: true,
-// };
-
-// const build = async () => {
-//   server.register(fastifyExpress).after(() => {
-//     // CORS setting must written before router.
-//     server.use(cors(corsOptions));
-//     server.use(bodyParser());
-//     server.use(router);
-//   });
-//   return server;
-// };
-
-// build()
-//   .then((server) =>
-//     server.listen(port, '0.0.0.0', (err, address) => {
-//       if (err) {
-//         logger.debug(err);
-//         /*global process*/
-//         /*eslint no-undef: "error"*/
-//         process.exit(1);
-//       }
-//       logger.debug(`Server listening at ${address}`);
-//     }),
-//   )
-//   .catch(logger.debug);
