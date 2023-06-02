@@ -68,12 +68,12 @@ jobs:
         run: |
           for changed_file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "Changed file name is ${changed_file}."
-            if [[ "$changed_file" == "src/app.ts" ]]; then
-              echo "${changed_file} has been changed."
-              npm run build
-            elif [[ "$changed_file" == *".test."* ]]; then
+            if [[ "$changed_file" == *".test."* ]]; then
               echo "${changed_file} has been changed."
               npm run test
+            elif [[ "$changed_file" == "src/app.ts" ]]; then
+              echo "${changed_file} has been changed."
+              npm run build
             else
               echo "${changed_file} has been changed but process is skipped."
               npm i
