@@ -3,6 +3,9 @@ name: ci-cd (master)
 on:
   pull_request:
     branches: [master]
+    types: [opened, synchronize, reopened]
+    paths:
+      - src/*
 
 jobs:
   check-test:
@@ -21,6 +24,18 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+      - name: Check diff
+        id: diff-check
+        # when commits are pushed into pull requests
+        if: github.event.action == 'synchronize'
+        run: echo "diff-count=$(git diff ${{ github.event.before }} ${{ github.event.after }} --name-only --relative=sources | wc -l)" >> $GITHUB_OUTPUT
+      - name: Check No diff
+        id: no-diff-check
+        if: github.event.action != 'synchronize'
+        run: echo "diff-count=1" >> $GITHUB_OUTPUT
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
