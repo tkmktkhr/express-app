@@ -1,0 +1,35 @@
+name: ci-cd (master)
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  check-test:
+    # The type of runner that the job will run on
+    name: Test on node ${{ matrix.node-version }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node-version: [18.x]
+        os: [ubuntu-latest]
+
+    # Select environment. Github Settings -> Environments
+    # environment:
+    #   name: production
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: npm install, build and test
+        env:
+          UNDEFINED_ENV: ${{ secrets.UNDEFINED_ENV }}
+        run: |
+          npm install
+          npm run build
+          npm run test

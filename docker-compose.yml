@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  api:
+    build:
+      context: .
+    command: sh -c "npm run dev"
+    tty: true
+    volumes:
+      - ./src:/src/:cached
+    ports:
+      - '3001:3030'

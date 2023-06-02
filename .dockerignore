@@ -1,0 +1,9 @@
+node_modules
+.husly
+.vscode
+dist
+.eslintrc
+.gitignore
+prettierrc
+Dockerfile
+README.md
