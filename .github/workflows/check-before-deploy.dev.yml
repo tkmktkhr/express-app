@@ -76,6 +76,7 @@ jobs:
               npm run test
             else
               echo "${changed_file} has been changed but process is skipped."
+              npm i
             fi  
           done
 
