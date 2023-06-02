@@ -4,8 +4,6 @@ on:
   pull_request:
     branches: [develop]
     types: [opened, synchronize, reopened]
-    paths:
-      - src/*
 
 jobs:
   check-test:
