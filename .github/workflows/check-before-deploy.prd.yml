@@ -28,11 +28,11 @@ jobs:
       - name: Check diff
         id: diff-check
         # when commits are pushed into pull requests
-        if: github.event.action == 'synchronize'
+        if: github.event.action == 'synchronize' || github.event.action == 'opened'
         run: echo "diff-count=$(git diff ${{ github.event.before }} ${{ github.event.after }} --name-only --relative=sources | wc -l)" >> $GITHUB_OUTPUT
       - name: Check No diff
         id: no-diff-check
-        if: github.event.action != 'synchronize'
+        if: github.event.action != 'synchronize' && github.event.action != 'opened'
         run: echo "diff-count=1" >> $GITHUB_OUTPUT
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
