@@ -25,15 +25,19 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
-      - name: Check diff
-        id: diff-check
-        # when commits are pushed into pull requests
-        if: github.event.action == 'synchronize' || github.event.action == 'opened'
-        run: echo "diff-count=$(git diff ${{ github.event.before }} ${{ github.event.after }} --name-only --relative=sources | wc -l)" >> $GITHUB_OUTPUT
-      - name: Check No diff
-        id: no-diff-check
-        if: github.event.action != 'synchronize' && github.event.action != 'opened'
-        run: echo "diff-count=1" >> $GITHUB_OUTPUT
+      - name: Get changed target files
+        id: changed-files
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            **/*.test.{ts,js}
+            ./src/app.{ts,js}
+      - name: List all changed files
+        if: github.event_name == 'pull_request'
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "Changed file: $file"
+          done
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -46,3 +50,18 @@ jobs:
           npm install
           npm run build
           npm run test
+      - name: build or test depending on the changed file
+        if: github.event_name == 'pull_request'
+        run: |
+          for changed_file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "Changed file name is ${changed_file}."
+            if [[ "$changed_file" == "src/app.ts" ]]; then
+              echo "${changed_file} has been changed."
+              npm run build
+            elif [[ "$changed_file" == *".test."* ]]; then
+              echo "${changed_file} has been changed."
+              npm run test
+            else
+              echo "${changed_file} has been changed but process is skipped."
+            fi  
+          done
