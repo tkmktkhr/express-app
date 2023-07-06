@@ -1,5 +1,3 @@
-// import { getAuthorizeUrl, setAccessToken } from '@/infrastructures/apis/googleApis';
-// import { getPeopleSrc } from '@/infrastructures/apis/googleApis';
 import { logger } from '@/app';
 // import { FastifyInstance, FastifyReply, FastifyRequest, FastifyServerOptions } from 'fastify';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
