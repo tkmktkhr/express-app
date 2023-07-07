@@ -38,20 +38,17 @@ export const getAuthorizeUrl = async () => {
   return oauth2Client.generateAuthUrl(optionsForAuthURl);
 };
 
-// ------SET FIRST TOKEN
 export const setAccessToken = async (code: string) => {
   const { tokens } = await oauth2Client.getToken(code);
   logger.debug({ tokens });
   logger.debug(oauth2Client);
   logger.debug('BEFORE oauth2Client');
   oauth2Client.setCredentials(tokens);
-  logger.debug('----------------------------');
   logger.debug('AFTER oauth2Client');
   logger.debug(oauth2Client);
   return;
 };
 
-// ------PEOPLE API
 const people = google.people({
   version: 'v1',
   auth: oauth2Client,
@@ -70,7 +67,6 @@ export const getPeopleSrc = async () => {
   logger.debug(oauth2Client);
   const res = await people.people.get(getPeopleParams).catch((e) => logger.error(e));
   logger.debug(res);
-  logger.debug('----------------------------');
   logger.debug('AFTER GETTING PEOPLE INFO oauth2Client');
   logger.debug(oauth2Client);
   return res?.data;
