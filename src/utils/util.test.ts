@@ -1,4 +1,4 @@
-import { sampleUserData } from './sample-data';
+import { sampleUserData } from '@/utils/sample-data';
 
 jest.setTimeout(30000);
 
